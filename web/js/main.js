@@ -21,8 +21,8 @@ const shop = new Sprite({
 const player1 = new Luchador({
   position: { x: 204.8, y: 100 },
   velocity: { x: 0, y: 10 },
-  offset: { x: 0, y: 0 },
   imgSrc: "./assets/personajes/Martial_Hero/Sprites/Idle.png",
+  flipH: false,
   framesMax: 8,
   scale: 2.5,
   offset: { x: 215, y: 157 },
@@ -85,8 +85,13 @@ const player1 = new Luchador({
       framesMax: 6,
     },
   },
-  attackBox: {
+  attackBox_normal: {
     offset: { x: 100, y: 50 },
+    width: 157,
+    height: 50,
+  },
+  attackBox_flipH: {
+    offset: { x: -187, y: 50 },
     width: 157,
     height: 50,
   },
@@ -158,7 +163,12 @@ const player2 = new Luchador({
       framesMax: 7,
     },
   },
-  attackBox: {
+  attackBox_normal: {
+    offset: { x: 70, y: 50 },
+    width: 170,
+    height: 50,
+  },
+  attackBox_flipH: {
     offset: { x: -170, y: 50 },
     width: 170,
     height: 50,

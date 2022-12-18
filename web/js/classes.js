@@ -59,8 +59,9 @@ class Luchador extends Sprite {
     framesMax = 1,
     offset = { x: 0, y: 0 },
     sprites,
-    attackBox = { offset: {}, width: undefined, height: undefined },
-    flipH = false,
+    flipH,
+    attackBox_normal = { offset: {}, width: undefined, height: undefined },
+    attackBox_flipH = { offset: {}, width: undefined, height: undefined },
   }) {
     super({
       position,
@@ -74,14 +75,33 @@ class Luchador extends Sprite {
     this.width = 50;
     this.height = 150;
     this.lastKey;
+    this.flipH = flipH;
+    this.attackBox_normal = {
+      position: {
+        x: this.position.x,
+        y: this.position.y,
+      },
+      offset: attackBox_normal.offset,
+      width: attackBox_normal.width,
+      height: attackBox_normal.height,
+    };
+    this.attackBox_flipH = {
+      position: {
+        x: this.position.x,
+        y: this.position.y,
+      },
+      offset: attackBox_flipH.offset,
+      width: attackBox_flipH.width,
+      height: attackBox_flipH.height,
+    };
     this.attackBox = {
       position: {
         x: this.position.x,
         y: this.position.y,
       },
-      offset: attackBox.offset,
-      width: attackBox.width,
-      height: attackBox.height,
+      offset: this.flipH ? attackBox_flipH.offset : attackBox_normal.offset,
+      width: this.flipH ? attackBox_flipH.width : attackBox_normal.width,
+      height: this.flipH ? attackBox_flipH.height : attackBox_normal.height,
     };
     this.isAttacking;
     this.isJumping = false;
@@ -91,7 +111,6 @@ class Luchador extends Sprite {
     this.framesHold = 5;
     this.sprites = sprites;
     this.dead = false;
-    this.flipH = flipH;
 
     for (const sprite in this.sprites) {
       sprites[sprite].image = new Image();
@@ -106,13 +125,16 @@ class Luchador extends Sprite {
     }
     this.attackBox.position.x = this.position.x + this.attackBox.offset.x;
     this.attackBox.position.y = this.position.y + this.attackBox.offset.y;
-    /*la hitbox
+    this.attackBox.offset = this.flipH
+      ? this.attackBox_flipH.offset
+      : this.attackBox_normal.offset;
+    /*la hitbox */
     c.fillRect(
       this.attackBox.position.x,
       this.attackBox.position.y,
       this.attackBox.width,
       this.attackBox.height
-    ); */
+    );
     this.position.x += this.velocity.x;
     this.position.y += this.velocity.y;
     if (this.position.y + this.height + this.velocity.y >= canvas.height - 96) {
