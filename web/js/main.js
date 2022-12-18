@@ -195,6 +195,9 @@ function animate() {
   player1.velocity.x = 0;
   player2.velocity.x = 0;
 
+  player1.flipH = player1.position.x < player2.position.x ? false : true;
+  player2.flipH = player2.position.x < player1.position.x ? false : true;
+
   //player1 movimiento
   if (keys.a.pressed && player1.lastKey === "a") {
     player1.velocity.x = -5;
