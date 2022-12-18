@@ -9,21 +9,40 @@ c.fillRect(0, 0, canvas.width, canvas.height)
 const gravity = 0.7
 
 class Sprite {
-    constructor({position, velocity}){
+    constructor({position, velocity, color, offset}){
         this.position = position
         this.velocity = velocity
         this.width = 50
         this.height = 150
         this.lastKey
+        this.attackBox = {
+            position: {
+                x: this.position.x,
+                y: this.position.y
+            },
+            offset,
+            width: 100,
+            height: 50
+        }
+        this.color = color
+        this.isAttacking
     }
 
     draw(){
-        c.fillStyle = 'red'
+        //muñeco
+        c.fillStyle = this.color
         c.fillRect(this.position.x, this.position.y, this.width, this.height)
+        //attackBox
+        if (this.isAttacking) {
+            c.fillStyle = 'green'
+            c.fillRect(this.attackBox.position.x, this.attackBox.position.y, this.attackBox.width, this.attackBox.height)   
+        }
     }
 
     update(){
         this.draw()
+        this.attackBox.position.x = this.position.x + this.attackBox.offset.x
+        this.attackBox.position.y = this.position.y
         this.position.x += this.velocity.x
         this.position.y += this.velocity.y
         if (this.position.y + this.height + this.velocity.y >= canvas.height) {
@@ -32,15 +51,26 @@ class Sprite {
             this.velocity.y += gravity
         }
     }
+
+    attack(){
+        this.isAttacking = true
+        setTimeout(() => {
+            this.isAttacking = false
+        }, 100);
+    }
 }
 
 const player1 = new Sprite({
     position: {x:0, y:0},
-    velocity: {x:0, y:10}
+    velocity: {x:0, y:10},
+    color: 'red',
+    offset: {x:0, y:0}
 })
 const player2 = new Sprite({
     position: {x:400, y:100},
-    velocity: {x:0, y:10}
+    velocity: {x:0, y:10},
+    color: 'blue',
+    offset: {x:-50, y:0}
 })
 
 player1.draw()
@@ -60,6 +90,15 @@ const keys = {
     fs: {pressed: false}
 }
 
+function colisionRectangular({rectangulo1, rectangulo2}) {
+    return (
+        rectangulo1.attackBox.position.x + rectangulo1.attackBox.width >= rectangulo2.position.x && 
+        rectangulo1.attackBox.position.x <= rectangulo2.position.x + rectangulo2.width && 
+        rectangulo1.attackBox.position.y + rectangulo1.attackBox.height >= rectangulo2.position.y && 
+        rectangulo1.attackBox.position.y <= rectangulo2.position.y + rectangulo2.height
+    )
+}
+
 function animate() {
     window.requestAnimationFrame(animate)
     c.fillStyle = 'black'
@@ -70,16 +109,28 @@ function animate() {
     player1.velocity.x = 0
     player2.velocity.x = 0
     
+    //player1 movimiento
     if (keys.a.pressed && player1.lastKey === 'a'){
         player1.velocity.x = -5
     } else if (keys.d.pressed && player1.lastKey === 'd'){
         player1.velocity.x = 5
     }
 
+    //player2 movimiento
     if (keys.fa.pressed && player2.lastKey === 'fa'){
         player2.velocity.x = -5
     } else if (keys.fd.pressed && player2.lastKey === 'fd'){
         player2.velocity.x = 5
+    }
+
+    //detectar colisión
+    if ( colisionRectangular({rectangulo1: player1, rectangulo2: player2}) && player1.isAttacking) {
+        player1.isAttacking = false
+        console.log('player1 hace daño a player2')
+    }
+    if ( colisionRectangular({rectangulo1: player2, rectangulo2: player1}) && player2.isAttacking) {
+        player2.isAttacking = false
+        console.log('player2 hace daño a player1')
     }
 }
 
@@ -87,7 +138,7 @@ animate()
 
 window.addEventListener('keydown', (event) => {
     switch (event.code) {
-        //player11 movimiento
+        //player1 movimiento
         case 'KeyD':
             keys.d.pressed = true
             player1.lastKey = 'd'
@@ -106,7 +157,11 @@ window.addEventListener('keydown', (event) => {
             player1.lastKey = 's'
             player1.velocity.y = 10
             break;
-        
+        //player1 ataques
+        case 'KeyJ':
+            player1.attack()
+            break;
+        //player2 movimiento
         case 'ArrowRight':
             keys.fd.pressed = true
             player2.lastKey = 'fd'
@@ -125,7 +180,11 @@ window.addEventListener('keydown', (event) => {
             player2.lastKey = 'fs'
             player2.velocity.y = 10
             break;
-        
+        //player2 movimiento
+        case 'Numpad1':
+            player2.attack()
+            break;
+        //default
         default:
             break;
     }
@@ -162,5 +221,4 @@ window.addEventListener('keyup', (event) => {
         default:
             break;
     }
-    console.log(event.code);
 })
