@@ -11,6 +11,8 @@ body {
 section {
   position: relative;
   display: inline-block;
+  border: 5px solid black;
+  border-radius: 5px;
 }
 #datosTop {
   position: absolute;

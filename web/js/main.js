@@ -19,7 +19,7 @@ const shop = new Sprite({
 });
 
 const player1 = new Luchador({
-  position: { x: 0, y: 0 },
+  position: { x: 204.8, y: 100 },
   velocity: { x: 0, y: 10 },
   offset: { x: 0, y: 0 },
   imgSrc: "./assets/personajes/Martial_Hero/Sprites/Idle.png",
@@ -55,6 +55,35 @@ const player1 = new Luchador({
       imgSrc: "./assets/personajes/Martial_Hero/Sprites/Death.png",
       framesMax: 6,
     },
+    //flipH
+    idle_flipH: {
+      imgSrc: "./assets/personajes/Martial_Hero/Sprites/Idle_flipH.png",
+      framesMax: 8,
+    },
+    run_flipH: {
+      imgSrc: "./assets/personajes/Martial_Hero/Sprites/Run_flipH.png",
+      framesMax: 8,
+    },
+    jump_flipH: {
+      imgSrc: "./assets/personajes/Martial_Hero/Sprites/Jump_flipH.png",
+      framesMax: 2,
+    },
+    fall_flipH: {
+      imgSrc: "./assets/personajes/Martial_Hero/Sprites/Fall_flipH.png",
+      framesMax: 2,
+    },
+    attack1_flipH: {
+      imgSrc: "./assets/personajes/Martial_Hero/Sprites/Attack1_flipH.png",
+      framesMax: 6,
+    },
+    takeHit_flipH: {
+      imgSrc: "./assets/personajes/Martial_Hero/Sprites/Take Hit_flipH.png",
+      framesMax: 4,
+    },
+    death_flipH: {
+      imgSrc: "./assets/personajes/Martial_Hero/Sprites/Death_flipH.png",
+      framesMax: 6,
+    },
   },
   attackBox: {
     offset: { x: 100, y: 50 },
@@ -63,7 +92,7 @@ const player1 = new Luchador({
   },
 });
 const player2 = new Luchador({
-  position: { x: 400, y: 100 },
+  position: { x: 716.8, y: 100 },
   velocity: { x: 0, y: 10 },
   imgSrc: "./assets/personajes/Martial_Hero_2/Sprites/Idle.png",
   framesMax: 4,
@@ -96,6 +125,35 @@ const player2 = new Luchador({
     },
     death: {
       imgSrc: "./assets/personajes/Martial_Hero_2/Sprites/Death.png",
+      framesMax: 7,
+    },
+    //flipH
+    idle_flipH: {
+      imgSrc: "./assets/personajes/Martial_Hero_2/Sprites/Idle_flipH.png",
+      framesMax: 4,
+    },
+    run_flipH: {
+      imgSrc: "./assets/personajes/Martial_Hero_2/Sprites/Run_flipH.png",
+      framesMax: 8,
+    },
+    jump_flipH: {
+      imgSrc: "./assets/personajes/Martial_Hero_2/Sprites/Jump_flipH.png",
+      framesMax: 2,
+    },
+    fall_flipH: {
+      imgSrc: "./assets/personajes/Martial_Hero_2/Sprites/Fall_flipH.png",
+      framesMax: 2,
+    },
+    attack1_flipH: {
+      imgSrc: "./assets/personajes/Martial_Hero_2/Sprites/Attack1_flipH.png",
+      framesMax: 4,
+    },
+    takeHit_flipH: {
+      imgSrc: "./assets/personajes/Martial_Hero_2/Sprites/Take Hit_flipH.png",
+      framesMax: 3,
+    },
+    death_flipH: {
+      imgSrc: "./assets/personajes/Martial_Hero_2/Sprites/Death_flipH.png",
       framesMax: 7,
     },
   },
@@ -210,7 +268,7 @@ function animate() {
 animate();
 
 window.addEventListener("keydown", (event) => {
-  if (!player1.dead && !player2.dead) {
+  if (!player1.dead && !player2.dead && timer > 0) {
     switch (event.code) {
       //player1 movimiento
       case "KeyD":
@@ -224,12 +282,17 @@ window.addEventListener("keydown", (event) => {
       case "KeyW":
         keys.w.pressed = true;
         player1.lastKey = "w";
-        player1.velocity.y = -20;
+        if (!player1.isJumping) {
+          player1.velocity.y = -20;
+          player1.isJumping = true;
+        }
         break;
       case "KeyS":
-        keys.s.pressed = true;
-        player1.lastKey = "s";
-        player1.velocity.y = 10;
+        if (player1.isJumping) {
+          keys.s.pressed = true;
+          player1.lastKey = "s";
+          player1.velocity.y = 10;
+        }
         break;
       //player1 ataques
       case "KeyJ":
@@ -245,14 +308,19 @@ window.addEventListener("keydown", (event) => {
         player2.lastKey = "fa";
         break;
       case "ArrowUp":
-        keys.fw.pressed = true;
-        player2.lastKey = "fw";
-        player2.velocity.y = -20;
+        if (!player2.isJumping) {
+          keys.fw.pressed = true;
+          player2.lastKey = "fw";
+          player2.velocity.y = -20;
+          player2.isJumping = true;
+        }
         break;
       case "ArrowDown":
-        keys.fs.pressed = true;
-        player2.lastKey = "fs";
-        player2.velocity.y = 10;
+        if (player2.isJumping) {
+          keys.fs.pressed = true;
+          player2.lastKey = "fs";
+          player2.velocity.y = 10;
+        }
         break;
       //player2 movimiento
       case "Numpad1":

@@ -87,6 +87,7 @@ class Luchador extends Sprite {
     };
     this.color = color;
     this.isAttacking;
+    this.isJumping = false;
     this.health = 100;
     this.framesCurrent = 0;
     this.framesElapsed = 0;
@@ -119,8 +120,17 @@ class Luchador extends Sprite {
     if (this.position.y + this.height + this.velocity.y >= canvas.height - 96) {
       this.velocity.y = 0;
       this.position.y = 330.4;
+      this.isJumping = false;
     } else {
       this.velocity.y += gravity;
+    }
+    if (this.position.x + this.width + this.velocity.x >= canvas.width) {
+      this.velocity.x = 0;
+      this.position.x = canvas.width - this.width;
+    }
+    if (this.position.x + this.width + this.velocity.x <= 0) {
+      this.velocity.x = 0;
+      this.position.x = 0 - this.width;
     }
   }
 
