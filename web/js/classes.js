@@ -5,7 +5,6 @@ class Sprite {
     scale = 1,
     framesMax = 1,
     offset = { x: 0, y: 0 },
-    flipH = false,
   }) {
     this.position = position;
     this.width = 50;
@@ -18,7 +17,6 @@ class Sprite {
     this.framesElapsed = 0;
     this.framesHold = 10;
     this.offset = offset;
-    this.flipH = flipH;
   }
 
   draw() {
@@ -56,13 +54,13 @@ class Luchador extends Sprite {
   constructor({
     position,
     velocity,
-    color,
     imgSrc,
     scale = 1,
     framesMax = 1,
     offset = { x: 0, y: 0 },
     sprites,
     attackBox = { offset: {}, width: undefined, height: undefined },
+    flipH = false,
   }) {
     super({
       position,
@@ -85,7 +83,6 @@ class Luchador extends Sprite {
       width: attackBox.width,
       height: attackBox.height,
     };
-    this.color = color;
     this.isAttacking;
     this.isJumping = false;
     this.health = 100;
@@ -94,6 +91,7 @@ class Luchador extends Sprite {
     this.framesHold = 5;
     this.sprites = sprites;
     this.dead = false;
+    this.flipH = flipH;
 
     for (const sprite in this.sprites) {
       sprites[sprite].image = new Image();
@@ -135,35 +133,45 @@ class Luchador extends Sprite {
   }
 
   attack() {
-    this.switchSprite("attack1");
+    this.switchSprite(this.flipH ? "attack1_flipH" : "attack1");
     this.isAttacking = true;
   }
 
   takeHit() {
     this.health -= 10;
     if (this.health <= 0) {
-      this.switchSprite("death");
+      this.switchSprite(this.flipH ? "death_flipH" : "death");
     } else {
-      this.switchSprite("takeHit");
+      this.switchSprite(this.flipH ? "takeHit_flipH" : "takeHit");
     }
   }
 
   switchSprite(sprite) {
-    if (this.image === this.sprites.death.image) {
-      if (this.framesCurrent === this.sprites.death.framesMax - 1) {
+    if (
+      this.image === this.sprites.death.image ||
+      this.image === this.sprites.death_flipH.image
+    ) {
+      if (
+        this.framesCurrent === this.sprites.death.framesMax - 1 ||
+        this.framesCurrent === this.sprites.death_flipH.framesMax - 1
+      ) {
         this.dead = true;
       }
       return;
     }
     if (
-      this.image === this.sprites.attack1.image &&
-      this.framesCurrent < this.sprites.attack1.framesMax - 1
+      (this.image === this.sprites.attack1.image ||
+        this.image === this.sprites.attack1_flipH.image) &&
+      (this.framesCurrent < this.sprites.attack1.framesMax - 1 ||
+        this.framesCurrent < this.sprites.attack1_flipH.framesMax - 1)
     ) {
       return;
     }
     if (
-      this.image === this.sprites.takeHit.image &&
-      this.framesCurrent < this.sprites.takeHit.framesMax - 1
+      (this.image === this.sprites.takeHit.image ||
+        this.image === this.sprites.takeHit_flipH.image) &&
+      (this.framesCurrent < this.sprites.takeHit.framesMax - 1 ||
+        this.framesCurrent < this.sprites.takeHit_flipH.framesMax - 1)
     ) {
       return;
     }
@@ -214,6 +222,55 @@ class Luchador extends Sprite {
         if (this.image !== this.sprites.death.image) {
           this.image = this.sprites.death.image;
           this.framesMax = this.sprites.death.framesMax;
+          this.framesCurrent = 0;
+        }
+        break;
+      case "idle_flipH":
+        if (this.image !== this.sprites.idle_flipH.image) {
+          this.image = this.sprites.idle_flipH.image;
+          this.framesMax = this.sprites.idle_flipH.framesMax;
+          this.framesCurrent = 0;
+        }
+        break;
+      case "run_flipH":
+        if (this.image !== this.sprites.run_flipH.image) {
+          this.image = this.sprites.run_flipH.image;
+          this.framesMax = this.sprites.run_flipH.framesMax;
+          this.framesCurrent = 0;
+        }
+        break;
+      case "jump_flipH":
+        if (this.image !== this.sprites.jump_flipH.image) {
+          this.image = this.sprites.jump_flipH.image;
+          this.framesMax = this.sprites.jump_flipH.framesMax;
+          this.framesCurrent = 0;
+        }
+        break;
+      case "fall_flipH":
+        if (this.image !== this.sprites.fall_flipH.image) {
+          this.image = this.sprites.fall_flipH.image;
+          this.framesMax = this.sprites.fall_flipH.framesMax;
+          this.framesCurrent = 0;
+        }
+        break;
+      case "attack1_flipH":
+        if (this.image !== this.sprites.attack1_flipH.image) {
+          this.image = this.sprites.attack1_flipH.image;
+          this.framesMax = this.sprites.attack1_flipH.framesMax;
+          this.framesCurrent = 0;
+        }
+        break;
+      case "takeHit_flipH":
+        if (this.image !== this.sprites.takeHit_flipH.image) {
+          this.image = this.sprites.takeHit_flipH.image;
+          this.framesMax = this.sprites.takeHit_flipH.framesMax;
+          this.framesCurrent = 0;
+        }
+        break;
+      case "death_flipH":
+        if (this.image !== this.sprites.death_flipH.image) {
+          this.image = this.sprites.death_flipH.image;
+          this.framesMax = this.sprites.death_flipH.framesMax;
           this.framesCurrent = 0;
         }
         break;

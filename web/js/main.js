@@ -94,7 +94,8 @@ const player1 = new Luchador({
 const player2 = new Luchador({
   position: { x: 716.8, y: 100 },
   velocity: { x: 0, y: 10 },
-  imgSrc: "./assets/personajes/Martial_Hero_2/Sprites/Idle.png",
+  imgSrc: "./assets/personajes/Martial_Hero_2/Sprites/Idle_flipH.png",
+  flipH: true,
   framesMax: 4,
   scale: 2.5,
   offset: { x: 215, y: 167 },
@@ -167,9 +168,6 @@ const player2 = new Luchador({
 player1.draw();
 player2.draw();
 
-console.log(player1);
-console.log(player2);
-
 const keys = {
   a: { pressed: false },
   d: { pressed: false },
@@ -200,33 +198,33 @@ function animate() {
   //player1 movimiento
   if (keys.a.pressed && player1.lastKey === "a") {
     player1.velocity.x = -5;
-    player1.switchSprite("run");
+    player1.switchSprite(player1.flipH ? "run_flipH" : "run");
   } else if (keys.d.pressed && player1.lastKey === "d") {
     player1.velocity.x = 5;
-    player1.switchSprite("run");
+    player1.switchSprite(player1.flipH ? "run_flipH" : "run");
   } else {
-    player1.switchSprite("idle");
+    player1.switchSprite(player1.flipH ? "idle_flipH" : "idle");
   }
   if (player1.velocity.y < 0) {
-    player1.switchSprite("jump");
+    player1.switchSprite(player1.flipH ? "jump_flipH" : "jump");
   } else if (player1.velocity.y > 0) {
-    player1.switchSprite("fall");
+    player1.switchSprite(player1.flipH ? "fall_flipH" : "fall");
   }
 
   //player2 movimiento
   if (keys.fa.pressed && player2.lastKey === "fa") {
     player2.velocity.x = -5;
-    player2.switchSprite("run");
+    player2.switchSprite(player2.flipH ? "run_flipH" : "run");
   } else if (keys.fd.pressed && player2.lastKey === "fd") {
     player2.velocity.x = 5;
-    player2.switchSprite("run");
+    player2.switchSprite(player2.flipH ? "run_flipH" : "run");
   } else {
-    player2.switchSprite("idle");
+    player2.switchSprite(player2.flipH ? "idle_flipH" : "idle");
   }
   if (player2.velocity.y < 0) {
-    player2.switchSprite("jump");
+    player2.switchSprite(player2.flipH ? "jump_flipH" : "jump");
   } else if (player2.velocity.y > 0) {
-    player2.switchSprite("fall");
+    player2.switchSprite(player2.flipH ? "fall_flipH" : "fall");
   }
 
   //detectar colisión
@@ -237,7 +235,6 @@ function animate() {
   ) {
     player2.takeHit();
     player1.isAttacking = false;
-    console.log("player1 hace daño a player2");
     gsap.to("#player2vidaInterna", { width: player2.health + "%" });
   }
   if (
@@ -247,7 +244,6 @@ function animate() {
   ) {
     player1.takeHit();
     player2.isAttacking = false;
-    console.log("player2 hace daño a player1");
     gsap.to("#player1vidaInterna", { width: player1.health + "%" });
   }
 
@@ -330,7 +326,6 @@ window.addEventListener("keydown", (event) => {
       default:
         break;
     }
-    console.log(event.code);
   }
 });
 window.addEventListener("keyup", (event) => {

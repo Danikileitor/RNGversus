@@ -15,7 +15,6 @@ function determinarGanador({ player1, player2, timerId }) {
   clearTimeout(timerId);
   document.getElementById("resultado").style.display = "flex";
   if (player1.health === player2.health) {
-    console.log("empate");
     document.getElementById("resultado").innerHTML = "Empate";
   } else if (player1.health > player2.health) {
     document.getElementById("resultado").innerHTML = "Victoria para Jugador1";
