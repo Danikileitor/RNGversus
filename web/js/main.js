@@ -34,20 +34,20 @@ class Sprite {
     }
 }
 
-const player = new Sprite({
+const player1 = new Sprite({
     position: {x:0, y:0},
     velocity: {x:0, y:10}
 })
-const enemy = new Sprite({
+const player2 = new Sprite({
     position: {x:400, y:100},
     velocity: {x:0, y:10}
 })
 
-player.draw()
-enemy.draw()
+player1.draw()
+player2.draw()
 
-console.log(player)
-console.log(enemy)
+console.log(player1)
+console.log(player2)
 
 const keys = {
     a: {pressed: false},
@@ -64,22 +64,22 @@ function animate() {
     window.requestAnimationFrame(animate)
     c.fillStyle = 'black'
     c.fillRect(0, 0, canvas.width, canvas.height)
-    player.update()
-    enemy.update()
+    player1.update()
+    player2.update()
 
-    player.velocity.x = 0
-    enemy.velocity.x = 0
+    player1.velocity.x = 0
+    player2.velocity.x = 0
     
-    if (keys.a.pressed && player.lastKey === 'a'){
-        player.velocity.x = -5
-    } else if (keys.d.pressed && player.lastKey === 'd'){
-        player.velocity.x = 5
+    if (keys.a.pressed && player1.lastKey === 'a'){
+        player1.velocity.x = -5
+    } else if (keys.d.pressed && player1.lastKey === 'd'){
+        player1.velocity.x = 5
     }
 
-    if (keys.fa.pressed && enemy.lastKey === 'fa'){
-        enemy.velocity.x = -5
-    } else if (keys.fd.pressed && enemy.lastKey === 'fd'){
-        enemy.velocity.x = 5
+    if (keys.fa.pressed && player2.lastKey === 'fa'){
+        player2.velocity.x = -5
+    } else if (keys.fd.pressed && player2.lastKey === 'fd'){
+        player2.velocity.x = 5
     }
 }
 
@@ -87,42 +87,43 @@ animate()
 
 window.addEventListener('keydown', (event) => {
     switch (event.code) {
+        //player11 movimiento
         case 'KeyD':
             keys.d.pressed = true
-            player.lastKey = 'd'
+            player1.lastKey = 'd'
             break;
         case 'KeyA':
             keys.a.pressed = true
-            player.lastKey = 'a'
+            player1.lastKey = 'a'
             break;
         case 'KeyW':
             keys.w.pressed = true
-            player.lastKey = 'w'
-            player.velocity.y = -20
+            player1.lastKey = 'w'
+            player1.velocity.y = -20
             break;
         case 'KeyS':
             keys.s.pressed = true
-            player.lastKey = 's'
-            player.velocity.y = 10
+            player1.lastKey = 's'
+            player1.velocity.y = 10
             break;
         
         case 'ArrowRight':
             keys.fd.pressed = true
-            enemy.lastKey = 'fd'
+            player2.lastKey = 'fd'
             break;
         case 'ArrowLeft':
             keys.fa.pressed = true
-            enemy.lastKey = 'fa'
+            player2.lastKey = 'fa'
             break;
         case 'ArrowUp':
             keys.fw.pressed = true
-            enemy.lastKey = 'fw'
-            enemy.velocity.y = -20
+            player2.lastKey = 'fw'
+            player2.velocity.y = -20
             break;
         case 'ArrowDown':
             keys.fs.pressed = true
-            enemy.lastKey = 'fs'
-            enemy.velocity.y = 10
+            player2.lastKey = 'fs'
+            player2.velocity.y = 10
             break;
         
         default:
