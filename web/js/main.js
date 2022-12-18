@@ -131,6 +131,8 @@ function animate() {
   c.fillRect(0, 0, canvas.width, canvas.height);
   background.update();
   shop.update();
+  c.fillStyle = "rgba(255, 255, 255, 0.15)";
+  c.fillRect(0, 0, canvas.width, canvas.height);
   player1.update();
   player2.update();
 
@@ -178,8 +180,7 @@ function animate() {
     player2.takeHit();
     player1.isAttacking = false;
     console.log("player1 hace daño a player2");
-    document.getElementById("player2vidaInterna").style.width =
-      player2.health + "%";
+    gsap.to("#player2vidaInterna", { width: player2.health + "%" });
   }
   if (
     colisionRectangular({ rectangulo1: player2, rectangulo2: player1 }) &&
@@ -189,9 +190,7 @@ function animate() {
     player1.takeHit();
     player2.isAttacking = false;
     console.log("player2 hace daño a player1");
-    player1.health -= 10;
-    document.getElementById("player1vidaInterna").style.width =
-      player1.health + "%";
+    gsap.to("#player1vidaInterna", { width: player1.health + "%" });
   }
 
   //fallar ataque
