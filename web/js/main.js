@@ -48,11 +48,15 @@ const player1 = new Luchador({
       framesMax: 6,
     },
   },
+  attackBox: {
+    offset: { x: 100, y: 50 },
+    width: 157,
+    height: 50,
+  },
 });
 const player2 = new Luchador({
   position: { x: 400, y: 100 },
   velocity: { x: 0, y: 10 },
-  offset: { x: -50, y: 0 },
   imgSrc: "./assets/personajes/Martial_Hero_2/Sprites/Idle.png",
   framesMax: 4,
   scale: 2.5,
@@ -78,6 +82,11 @@ const player2 = new Luchador({
       imgSrc: "./assets/personajes/Martial_Hero_2/Sprites/Attack1.png",
       framesMax: 4,
     },
+  },
+  attackBox: {
+    offset: { x: -170, y: 50 },
+    width: 170,
+    height: 50,
   },
 });
 
@@ -147,7 +156,8 @@ function animate() {
   //detectar colisión
   if (
     colisionRectangular({ rectangulo1: player1, rectangulo2: player2 }) &&
-    player1.isAttacking
+    player1.isAttacking &&
+    player1.framesCurrent === 4
   ) {
     player1.isAttacking = false;
     console.log("player1 hace daño a player2");
@@ -157,13 +167,22 @@ function animate() {
   }
   if (
     colisionRectangular({ rectangulo1: player2, rectangulo2: player1 }) &&
-    player2.isAttacking
+    player2.isAttacking &&
+    player2.framesCurrent === 2
   ) {
     player2.isAttacking = false;
     console.log("player2 hace daño a player1");
     player1.health -= 10;
     document.getElementById("player1vidaInterna").style.width =
       player1.health + "%";
+  }
+
+  //fallar ataque
+  if (player1.isAttacking && player1.framesCurrent === 4) {
+    player1.isAttacking = false;
+  }
+  if (player2.isAttacking && player2.framesCurrent === 2) {
+    player2.isAttacking = false;
   }
 
   //fin del juego por vida
