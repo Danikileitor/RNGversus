@@ -1,6 +1,50 @@
+*{
+    box-sizing: border-box;
+}
 body{
     width: fit-content;
     margin: auto;
     text-align: center;
     background-color: aqua;
+}
+section{
+    position: relative;
+    display: inline-block;
+}
+#datosTop{
+    position: absolute;
+    display: flex;
+    width: 100%;
+    align-items: center;
+    padding: 20px;
+}
+#player1vida{
+    position: relative;
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    height: 30px;
+    border: 1px solid red;
+}
+#player1vidaInterna{
+    width: 100%;
+    height: 100%;
+    background-color: red;
+}
+#player2vida{
+    position: relative;
+    width: 100%;
+    height: 30px;
+    border: 1px solid blue;
+}
+#player2vidaInterna{
+    width: 100%;
+    height: 100%;
+    background-color: blue;
+}
+#timer{
+    background-color: silver;
+    width: 10%;
+    height: 100px;
+    flex-shrink: 0;
 }

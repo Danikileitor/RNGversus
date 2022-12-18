@@ -26,6 +26,7 @@ class Sprite {
         }
         this.color = color
         this.isAttacking
+        this.health = 100
     }
 
     draw(){
@@ -124,13 +125,17 @@ function animate() {
     }
 
     //detectar colisión
-    if ( colisionRectangular({rectangulo1: player1, rectangulo2: player2}) && player1.isAttacking) {
+    if (colisionRectangular({rectangulo1: player1, rectangulo2: player2}) && player1.isAttacking) {
         player1.isAttacking = false
         console.log('player1 hace daño a player2')
+        player2.health -= 10
+        document.getElementById('player2vidaInterna').style.width = player2.health + '%'
     }
-    if ( colisionRectangular({rectangulo1: player2, rectangulo2: player1}) && player2.isAttacking) {
+    if (colisionRectangular({rectangulo1: player2, rectangulo2: player1}) && player2.isAttacking) {
         player2.isAttacking = false
         console.log('player2 hace daño a player1')
+        player1.health -= 10
+        document.getElementById('player1vidaInterna').style.width = player1.health + '%'
     }
 }
 
