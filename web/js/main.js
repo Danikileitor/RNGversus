@@ -52,8 +52,33 @@ const player1 = new Luchador({
 const player2 = new Luchador({
   position: { x: 400, y: 100 },
   velocity: { x: 0, y: 10 },
-  color: "blue",
   offset: { x: -50, y: 0 },
+  imgSrc: "./assets/personajes/Martial_Hero_2/Sprites/Idle.png",
+  framesMax: 4,
+  scale: 2.5,
+  offset: { x: 215, y: 167 },
+  sprites: {
+    idle: {
+      imgSrc: "./assets/personajes/Martial_Hero_2/Sprites/Idle.png",
+      framesMax: 4,
+    },
+    run: {
+      imgSrc: "./assets/personajes/Martial_Hero_2/Sprites/Run.png",
+      framesMax: 8,
+    },
+    jump: {
+      imgSrc: "./assets/personajes/Martial_Hero_2/Sprites/Jump.png",
+      framesMax: 2,
+    },
+    fall: {
+      imgSrc: "./assets/personajes/Martial_Hero_2/Sprites/Fall.png",
+      framesMax: 2,
+    },
+    attack1: {
+      imgSrc: "./assets/personajes/Martial_Hero_2/Sprites/Attack1.png",
+      framesMax: 4,
+    },
+  },
 });
 
 player1.draw();
@@ -82,7 +107,7 @@ function animate() {
   background.update();
   shop.update();
   player1.update();
-  //player2.update();
+  player2.update();
 
   player1.velocity.x = 0;
   player2.velocity.x = 0;
@@ -106,8 +131,17 @@ function animate() {
   //player2 movimiento
   if (keys.fa.pressed && player2.lastKey === "fa") {
     player2.velocity.x = -5;
+    player2.switchSprite("run");
   } else if (keys.fd.pressed && player2.lastKey === "fd") {
     player2.velocity.x = 5;
+    player2.switchSprite("run");
+  } else {
+    player2.switchSprite("idle");
+  }
+  if (player2.velocity.y < 0) {
+    player2.switchSprite("jump");
+  } else if (player2.velocity.y > 0) {
+    player2.switchSprite("fall");
   }
 
   //detectar colisión
