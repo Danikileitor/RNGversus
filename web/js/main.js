@@ -47,6 +47,10 @@ const player1 = new Luchador({
       imgSrc: "./assets/personajes/Martial_Hero/Sprites/Attack1.png",
       framesMax: 6,
     },
+    takeHit: {
+      imgSrc: "./assets/personajes/Martial_Hero/Sprites/Take Hit.png",
+      framesMax: 4,
+    },
   },
   attackBox: {
     offset: { x: 100, y: 50 },
@@ -81,6 +85,10 @@ const player2 = new Luchador({
     attack1: {
       imgSrc: "./assets/personajes/Martial_Hero_2/Sprites/Attack1.png",
       framesMax: 4,
+    },
+    takeHit: {
+      imgSrc: "./assets/personajes/Martial_Hero_2/Sprites/Take Hit.png",
+      framesMax: 3,
     },
   },
   attackBox: {
@@ -159,9 +167,9 @@ function animate() {
     player1.isAttacking &&
     player1.framesCurrent === 4
   ) {
+    player2.takeHit();
     player1.isAttacking = false;
     console.log("player1 hace daño a player2");
-    player2.health -= 10;
     document.getElementById("player2vidaInterna").style.width =
       player2.health + "%";
   }
@@ -170,6 +178,7 @@ function animate() {
     player2.isAttacking &&
     player2.framesCurrent === 2
   ) {
+    player1.takeHit();
     player2.isAttacking = false;
     console.log("player2 hace daño a player1");
     player1.health -= 10;
