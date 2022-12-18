@@ -7,67 +7,18 @@ canvas.height = 576
 c.fillRect(0, 0, canvas.width, canvas.height)
 
 const gravity = 0.7
+const background = new Sprite({
+    position: {x: 0, y: 0},
+    imgSrc: './assets/oak_woods/background.png'
+})
 
-class Sprite {
-    constructor({position, velocity, color, offset}){
-        this.position = position
-        this.velocity = velocity
-        this.width = 50
-        this.height = 150
-        this.lastKey
-        this.attackBox = {
-            position: {
-                x: this.position.x,
-                y: this.position.y
-            },
-            offset,
-            width: 100,
-            height: 50
-        }
-        this.color = color
-        this.isAttacking
-        this.health = 100
-    }
-
-    draw(){
-        //muñeco
-        c.fillStyle = this.color
-        c.fillRect(this.position.x, this.position.y, this.width, this.height)
-        //attackBox
-        if (this.isAttacking) {
-            c.fillStyle = 'green'
-            c.fillRect(this.attackBox.position.x, this.attackBox.position.y, this.attackBox.width, this.attackBox.height)   
-        }
-    }
-
-    update(){
-        this.draw()
-        this.attackBox.position.x = this.position.x + this.attackBox.offset.x
-        this.attackBox.position.y = this.position.y
-        this.position.x += this.velocity.x
-        this.position.y += this.velocity.y
-        if (this.position.y + this.height + this.velocity.y >= canvas.height) {
-            this.velocity.y = 0
-        } else {
-            this.velocity.y += gravity
-        }
-    }
-
-    attack(){
-        this.isAttacking = true
-        setTimeout(() => {
-            this.isAttacking = false
-        }, 100);
-    }
-}
-
-const player1 = new Sprite({
+const player1 = new Luchador({
     position: {x:0, y:0},
     velocity: {x:0, y:10},
     color: 'red',
     offset: {x:0, y:0}
 })
-const player2 = new Sprite({
+const player2 = new Luchador({
     position: {x:400, y:100},
     velocity: {x:0, y:10},
     color: 'blue',
@@ -91,46 +42,13 @@ const keys = {
     fs: {pressed: false}
 }
 
-function colisionRectangular({rectangulo1, rectangulo2}) {
-    return (
-        rectangulo1.attackBox.position.x + rectangulo1.attackBox.width >= rectangulo2.position.x && 
-        rectangulo1.attackBox.position.x <= rectangulo2.position.x + rectangulo2.width && 
-        rectangulo1.attackBox.position.y + rectangulo1.attackBox.height >= rectangulo2.position.y && 
-        rectangulo1.attackBox.position.y <= rectangulo2.position.y + rectangulo2.height
-    )
-}
-
-function determinarGanador({player1, player2, timerId}) {
-    clearTimeout(timerId)
-    document.getElementById('resultado').style.display = 'flex'
-    if (player1.health === player2.health) {
-        console.log('empate')
-        document.getElementById('resultado').innerHTML = 'Empate'
-    } else if (player1.health > player2.health) {
-        document.getElementById('resultado').innerHTML = 'Victoria para Jugador1'
-    } else {
-        document.getElementById('resultado').innerHTML = 'Victoria para Jugador2'
-    }
-}
-
-let timer = 60
-let timerId
-function reducirTimer() {
-    if (timer > 0) {
-        timerId = setTimeout(reducirTimer, 1000)
-        timer--
-        document.getElementById('timer').innerHTML = timer
-    }
-    if (timer === 0) {
-        determinarGanador({player1, player2, timerId})
-    }
-}
 reducirTimer()
 
 function animate() {
     window.requestAnimationFrame(animate)
     c.fillStyle = 'black'
     c.fillRect(0, 0, canvas.width, canvas.height)
+    background.update()
     player1.update()
     player2.update()
 
