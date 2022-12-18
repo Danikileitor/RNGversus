@@ -51,6 +51,10 @@ const player1 = new Luchador({
       imgSrc: "./assets/personajes/Martial_Hero/Sprites/Take Hit.png",
       framesMax: 4,
     },
+    death: {
+      imgSrc: "./assets/personajes/Martial_Hero/Sprites/Death.png",
+      framesMax: 6,
+    },
   },
   attackBox: {
     offset: { x: 100, y: 50 },
@@ -89,6 +93,10 @@ const player2 = new Luchador({
     takeHit: {
       imgSrc: "./assets/personajes/Martial_Hero_2/Sprites/Take Hit.png",
       framesMax: 3,
+    },
+    death: {
+      imgSrc: "./assets/personajes/Martial_Hero_2/Sprites/Death.png",
+      framesMax: 7,
     },
   },
   attackBox: {
@@ -203,58 +211,60 @@ function animate() {
 animate();
 
 window.addEventListener("keydown", (event) => {
-  switch (event.code) {
-    //player1 movimiento
-    case "KeyD":
-      keys.d.pressed = true;
-      player1.lastKey = "d";
-      break;
-    case "KeyA":
-      keys.a.pressed = true;
-      player1.lastKey = "a";
-      break;
-    case "KeyW":
-      keys.w.pressed = true;
-      player1.lastKey = "w";
-      player1.velocity.y = -20;
-      break;
-    case "KeyS":
-      keys.s.pressed = true;
-      player1.lastKey = "s";
-      player1.velocity.y = 10;
-      break;
-    //player1 ataques
-    case "KeyJ":
-      player1.attack();
-      break;
-    //player2 movimiento
-    case "ArrowRight":
-      keys.fd.pressed = true;
-      player2.lastKey = "fd";
-      break;
-    case "ArrowLeft":
-      keys.fa.pressed = true;
-      player2.lastKey = "fa";
-      break;
-    case "ArrowUp":
-      keys.fw.pressed = true;
-      player2.lastKey = "fw";
-      player2.velocity.y = -20;
-      break;
-    case "ArrowDown":
-      keys.fs.pressed = true;
-      player2.lastKey = "fs";
-      player2.velocity.y = 10;
-      break;
-    //player2 movimiento
-    case "Numpad1":
-      player2.attack();
-      break;
-    //default
-    default:
-      break;
+  if (!player1.dead && !player2.dead) {
+    switch (event.code) {
+      //player1 movimiento
+      case "KeyD":
+        keys.d.pressed = true;
+        player1.lastKey = "d";
+        break;
+      case "KeyA":
+        keys.a.pressed = true;
+        player1.lastKey = "a";
+        break;
+      case "KeyW":
+        keys.w.pressed = true;
+        player1.lastKey = "w";
+        player1.velocity.y = -20;
+        break;
+      case "KeyS":
+        keys.s.pressed = true;
+        player1.lastKey = "s";
+        player1.velocity.y = 10;
+        break;
+      //player1 ataques
+      case "KeyJ":
+        player1.attack();
+        break;
+      //player2 movimiento
+      case "ArrowRight":
+        keys.fd.pressed = true;
+        player2.lastKey = "fd";
+        break;
+      case "ArrowLeft":
+        keys.fa.pressed = true;
+        player2.lastKey = "fa";
+        break;
+      case "ArrowUp":
+        keys.fw.pressed = true;
+        player2.lastKey = "fw";
+        player2.velocity.y = -20;
+        break;
+      case "ArrowDown":
+        keys.fs.pressed = true;
+        player2.lastKey = "fs";
+        player2.velocity.y = 10;
+        break;
+      //player2 movimiento
+      case "Numpad1":
+        player2.attack();
+        break;
+      //default
+      default:
+        break;
+    }
+    console.log(event.code);
   }
-  console.log(event.code);
 });
 window.addEventListener("keyup", (event) => {
   switch (event.code) {
