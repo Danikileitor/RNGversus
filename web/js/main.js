@@ -209,10 +209,10 @@ function animate() {
   player2.flipH = player2.position.x < player1.position.x ? false : true;
 
   //player1 movimiento
-  if (keys.a.pressed && player1.lastKey === "a") {
+  if (keys.a.pressed && (player1.lastKey === "a" || player1.lastKey === "w")) {
     player1.velocity.x = -5;
     player1.switchSprite(player1.flipH ? "run_flipH" : "run");
-  } else if (keys.d.pressed && player1.lastKey === "d") {
+  } else if (keys.d.pressed && (player1.lastKey === "d" || player1.lastKey === "w")) {
     player1.velocity.x = 5;
     player1.switchSprite(player1.flipH ? "run_flipH" : "run");
   } else {
@@ -225,10 +225,10 @@ function animate() {
   }
 
   //player2 movimiento
-  if (keys.fa.pressed && player2.lastKey === "fa") {
+  if (keys.fa.pressed && (player2.lastKey === "fa" || player2.lastKey === "fw")) {
     player2.velocity.x = -5;
     player2.switchSprite(player2.flipH ? "run_flipH" : "run");
-  } else if (keys.fd.pressed && player2.lastKey === "fd") {
+  } else if (keys.fd.pressed && (player2.lastKey === "fd" || player2.lastKey === "fw")) {
     player2.velocity.x = 5;
     player2.switchSprite(player2.flipH ? "run_flipH" : "run");
   } else {
