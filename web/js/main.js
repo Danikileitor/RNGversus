@@ -3,9 +3,9 @@ const c = canvas.getContext("2d");
 
 canvas.width = 1024;
 canvas.height = 576;
-
 c.fillRect(0, 0, canvas.width, canvas.height);
 
+let controllerIndex = null;
 const gravity = 0.7;
 const background = new Sprite({
   position: { x: 0, y: 0 },
@@ -212,7 +212,10 @@ function animate() {
   if (keys.a.pressed && (player1.lastKey === "a" || player1.lastKey === "w")) {
     player1.velocity.x = -5;
     player1.switchSprite(player1.flipH ? "run_flipH" : "run");
-  } else if (keys.d.pressed && (player1.lastKey === "d" || player1.lastKey === "w")) {
+  } else if (
+    keys.d.pressed &&
+    (player1.lastKey === "d" || player1.lastKey === "w")
+  ) {
     player1.velocity.x = 5;
     player1.switchSprite(player1.flipH ? "run_flipH" : "run");
   } else {
@@ -225,10 +228,16 @@ function animate() {
   }
 
   //player2 movimiento
-  if (keys.fa.pressed && (player2.lastKey === "fa" || player2.lastKey === "fw")) {
+  if (
+    keys.fa.pressed &&
+    (player2.lastKey === "fa" || player2.lastKey === "fw")
+  ) {
     player2.velocity.x = -5;
     player2.switchSprite(player2.flipH ? "run_flipH" : "run");
-  } else if (keys.fd.pressed && (player2.lastKey === "fd" || player2.lastKey === "fw")) {
+  } else if (
+    keys.fd.pressed &&
+    (player2.lastKey === "fd" || player2.lastKey === "fw")
+  ) {
     player2.velocity.x = 5;
     player2.switchSprite(player2.flipH ? "run_flipH" : "run");
   } else {
@@ -247,6 +256,7 @@ function animate() {
     player1.framesCurrent === 4
   ) {
     player2.takeHit();
+    vibrar(player2);
     player1.isAttacking = false;
     gsap.to("#player2vidaInterna", { width: player2.health + "%" });
   }
@@ -256,6 +266,7 @@ function animate() {
     player2.framesCurrent === 2
   ) {
     player1.takeHit();
+    vibrar(player1);
     player2.isAttacking = false;
     gsap.to("#player1vidaInterna", { width: player1.health + "%" });
   }
@@ -305,7 +316,9 @@ window.addEventListener("keydown", (event) => {
         break;
       //player1 ataques
       case "KeyJ":
-        player1.attack();
+        if (!player1.isAttacking) {
+          player1.attack();
+        }
         break;
       //player2 movimiento
       case "ArrowRight":
@@ -333,7 +346,9 @@ window.addEventListener("keydown", (event) => {
         break;
       //player2 movimiento
       case "Numpad1":
-        player2.attack();
+        if (!player2.isAttacking) {
+          player2.attack();
+        }
         break;
       //default
       default:
@@ -373,3 +388,106 @@ window.addEventListener("keyup", (event) => {
       break;
   }
 });
+//Soporte para mando
+window.addEventListener("gamepadconnected", (event) => {
+  const mando = event.gamepad;
+  controllerIndex = mando.index;
+  console.log("Mando " + mando.index + " conectado.");
+});
+window.addEventListener("gamepaddisconnected", (event) => {
+  const mando = event.gamepad;
+  controllerIndex = null;
+  console.log("Mando " + mando.index + " desconectado.");
+});
+
+function controllerInput() {
+  if (navigator.getGamepads()[0] != null) {
+    const mando1 = navigator.getGamepads()[0];
+    const botones = mando1.buttons;
+    keys.w.pressed = botones[12].pressed;
+    if (botones[12].pressed || botones[0].pressed) {
+      player1.lastKey = "w";
+      if (!player1.isJumping) {
+        player1.velocity.y = -20;
+        player1.isJumping = true;
+      }
+    }
+    keys.a.pressed = botones[14].pressed;
+    if (botones[14].pressed) {
+      player1.lastKey = "a";
+    }
+    keys.s.pressed = botones[13].pressed;
+    if (botones[13].pressed) {
+      if (player1.isJumping) {
+        player1.lastKey = "s";
+        player1.velocity.y = 10;
+      }
+    }
+    keys.d.pressed = botones[15].pressed;
+    if (botones[15].pressed) {
+      player1.lastKey = "d";
+    }
+    if (botones[2].pressed) {
+      player1.attack();
+    }
+  }
+  if (navigator.getGamepads()[1] != null) {
+    const mando2 = navigator.getGamepads()[1];
+    const botones = mando2.buttons;
+    keys.fw.pressed = botones[12].pressed;
+    if (botones[12].pressed || botones[0].pressed) {
+      player2.lastKey = "fw";
+      if (!player2.isJumping) {
+        player2.velocity.y = -20;
+        player2.isJumping = true;
+      }
+    }
+    keys.fa.pressed = botones[14].pressed;
+    if (botones[14].pressed) {
+      player2.lastKey = "fa";
+    }
+    keys.fs.pressed = botones[13].pressed;
+    if (botones[13].pressed) {
+      if (player2.isJumping) {
+        player2.lastKey = "fs";
+        player2.velocity.y = 10;
+      }
+    }
+    keys.fd.pressed = botones[15].pressed;
+    if (botones[15].pressed) {
+      player2.lastKey = "fd";
+    }
+    if (botones[2].pressed) {
+      player2.attack();
+    }
+  }
+}
+
+function vibrar(player) {
+  if (navigator.getGamepads()[0] != null) {
+    if (player === player1) {
+      navigator.getGamepads()[0].vibrationActuator.playEffect("dual-rumble", {
+        startDelay: 0,
+        duration: 100,
+        weakMagnitude: 1.0,
+        strongMagnitude: 1.0,
+      });
+    }
+  }
+  if (navigator.getGamepads()[1] != null) {
+    if (player === player2) {
+      navigator.getGamepads()[1].vibrationActuator.playEffect("dual-rumble", {
+        startDelay: 0,
+        duration: 100,
+        weakMagnitude: 1.0,
+        strongMagnitude: 1.0,
+      });
+    }
+  }
+}
+
+function gameLoop() {
+  controllerInput();
+  requestAnimationFrame(gameLoop);
+}
+gameLoop();
