@@ -428,7 +428,9 @@ function controllerInput() {
       player1.lastKey = "d";
     }
     if (botones[2].pressed) {
-      player1.attack();
+      if (!player1.isAttacking) {
+        player1.attack();
+      }
     }
   }
   if (navigator.getGamepads()[1] != null) {
@@ -458,7 +460,9 @@ function controllerInput() {
       player2.lastKey = "fd";
     }
     if (botones[2].pressed) {
-      player2.attack();
+      if (!player2.isAttacking) {
+        player2.attack();
+      }
     }
   }
 }
